@@ -2,7 +2,7 @@ import { } from 'solid-js'
 import type { Component } from 'solid-js'
 import Convert from 'ansi-to-html'
 
-interface AnsiProps {
+interface Props {
   text: string
 }
 
@@ -27,7 +27,7 @@ const convert = new Convert({
   },
 })
 
-const Ansi: Component<AnsiProps> = (props) => {
+const Ansi: Component<Props> = (props) => {
   return (
     <p class="whitespace-pre-wrap" innerHTML={convert.toHtml(props.text)} />
   )

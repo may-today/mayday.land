@@ -3,24 +3,52 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: "IBM 3270";
-    src:
-        url("/assets/3270-Regular.woff") format("woff");
+  font-family: 'Cubic-11';
+  src: url('/assets/Cubic_11_1.200_R.woff') format('woff'), url('/assets/Cubic_11_1.200_R.woff2') format('woff2');
 }
 
-@font-face {
-    font-family: "Fusion Pixel Zh-Hans";
-    src:
-        url("/assets/fusion-pixel-10px-monospaced-zh_hans.woff2") format("woff2");
+:root {
+  font-family: 'Cubic-11', monospace;
+  color-scheme: dark;
+  color: #f6f6f6;
 }
 
-@font-face {
-    font-family: "Cubic-11";
-    src:
-        url("/assets/Cubic_11_1.200_R.woff") format("woff"),
-        url("/assets/Cubic_11_1.200_R.woff2") format("woff2");
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #333333;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555555;
+}
+::-webkit-scrollbar-track {
+  background-color: #212121;
 }
 
-#app {
-    font-family: "Cubic-11", monospace;
+.ansi-black {
+  color: #333333;
+}
+.ansi-red {
+  color: #e47474;
+}
+.ansi-green {
+  color: #66b395;
+}
+.ansi-yellow {
+  color: #e2c97e;
+}
+.ansi-blue {
+  color: #7098d4;
+}
+.ansi-magenta {
+  color: #b290ba;
+}
+.ansi-cyan {
+  color: #6ab8c0;
+}
+.ansi-white {
+  color: #dddddd;
 }
