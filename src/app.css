@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "IBM 3270";
+    src:
+        url("/assets/3270-Regular.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Fusion Pixel Zh-Hans";
+    src:
+        url("/assets/fusion-pixel-10px-monospaced-zh_hans.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Cubic-11";
+    src:
+        url("/assets/Cubic_11_1.200_R.woff") format("woff"),
+        url("/assets/Cubic_11_1.200_R.woff2") format("woff2");
+}
+
+#app {
+    font-family: "Cubic-11", monospace;
+}
