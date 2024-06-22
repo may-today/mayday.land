@@ -13,8 +13,7 @@ import Header from '~/components/Header'
 import Login from '~/components/Login'
 import Hero from '~/components/Hero'
 import HeroInfo from '~/components/HeroInfo'
-import Ansi from '~/components/Ansi'
-import CurrentOnline from '~/components/CurrentOnline'
+import SendBox from '~/components/SendBox'
 import type { User } from '~/types'
 
 const getInitialCount = async () => {
@@ -34,7 +33,7 @@ export default function Page() {
   const [initialCount, { refetch }] = createResource(getInitialCount)
   const [messages, setMessages] = createStore<WSMessage[]>([])
   const [ws, setWs] = createSignal<WebSocket | null>(null)
-  const isLargerThanSm = createMediaQuery('(min-width: 767px)', false)
+  const isLargerThanSm = createMediaQuery('(min-width: 640px)', false)
 
   // const timer = setInterval(() => {
   //   refetch()
@@ -58,6 +57,12 @@ export default function Page() {
     // })
     // setWs(ws)
   })
+
+  const onSendText = async (text: string) => {
+    console.log('send', text)
+    // ws()?.send(text)
+    return true
+  }
 
   return (
     <main class="flex flex-col w-screen h-[100svh] bg-black whitespace-pre-wrap overflow-hidden">
@@ -90,10 +95,9 @@ export default function Page() {
           )}
         </For> */}
       </div>
-      {/* <Ansi text={`           ::::::::::'.d$N.^''...:::db.^'::::::::::.           `} />
-      <Ansi text={`          .::::::::: *#' ::::::::'z$$$$$bo.'''::::::           `} />
-      <Ansi text={`          :::::::''..-:::::::: 'u$$$$$$$$$$$$bu ':::           `} />
-      <Ansi text={`         ::::::'.::::::::::'.ud$$$$$$$$$$$$$$$$$  :'           `} /> */}
+      <Show when={!!user()}>
+        <SendBox user={user()!} onSend={onSendText} />
+      </Show>
     </main>
   )
 }

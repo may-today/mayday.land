@@ -32,7 +32,7 @@ const Hero: Component<Props> = (props) => {
   })
 
   return (
-    <div class="px-4 font-mono text-xs sm:text-sm whitespace-pre text-center">
+    <div class="px-4 font-mono text-xs sm:text-sm whitespace-pre text-center !leading-snug">
       <p> </p>
       <Show when={showState0()}>
         <p>{"           ::::::::::'.d$N.^''...:::db.^'::::::::::.     "}</p>

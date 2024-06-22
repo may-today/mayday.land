@@ -48,12 +48,14 @@ const Login: Component<Props> = (props) => {
         <input
           id="name"
           type="text"
-          class="bg-transparent focus:outline-none caret-sky-500"
+          class="bg-transparent focus:outline-none caret-sky-500 w-[240px]"
           value={name()}
           onInput={(e) => setName(e.currentTarget.value)}
           autofocus
           required
-          autocomplete='off'
+          maxLength={18}
+          autocomplete="off"
+          enterkeyhint="done"
           readOnly={!!finalUser() || undefined}
         />
       </p>

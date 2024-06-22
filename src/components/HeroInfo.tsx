@@ -32,7 +32,7 @@ const HeroInfo: Component<Props> = (props) => {
   })
 
   return (
-    <div class="px-4 font-mono text-sm whitespace-pre text-center">
+    <div class="px-4 font-mono text-sm whitespace-pre text-center !leading-snug">
       <p class="text-transparent">  ******************************  </p>
       <Show when={showState0()}>
         <p>{"      #      "}</p>
