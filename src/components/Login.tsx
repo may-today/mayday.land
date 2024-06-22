@@ -24,7 +24,7 @@ const Login: Component<Props> = (props) => {
     e.preventDefault()
     const user: User = {
       name: name(),
-      nameType: Math.floor(Math.random() * 6),
+      nameType: Math.floor(Math.random() * 12),
       suffix: generateSuffix(),
     }
     if (preservedName.includes(user.name)) {

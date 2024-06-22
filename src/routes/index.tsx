@@ -1,7 +1,8 @@
 import { Show, For, onMount, createSignal, createResource, onCleanup } from 'solid-js'
 import { createStore } from 'solid-js/store'
-import { createAsync, cache } from '@solidjs/router'
 import { Title } from '@solidjs/meta'
+import { createAsync, cache } from '@solidjs/router'
+import { createMediaQuery } from '@solid-primitives/media'
 import {
   makeHeartbeatWS,
   createReconnectingWS,
@@ -11,6 +12,7 @@ import pc from 'picocolors'
 import Header from '~/components/Header'
 import Login from '~/components/Login'
 import Hero from '~/components/Hero'
+import HeroInfo from '~/components/HeroInfo'
 import Ansi from '~/components/Ansi'
 import CurrentOnline from '~/components/CurrentOnline'
 import type { User } from '~/types'
@@ -27,9 +29,12 @@ const getInitialCount = async () => {
 
 export default function Page() {
   const [user, setUser] = createSignal<User | null>(null)
+  const [anim1Finished, setAnim1Finished] = createSignal(false)
+  const [anim2Finished, setAnim2Finished] = createSignal(false)
   const [initialCount, { refetch }] = createResource(getInitialCount)
   const [messages, setMessages] = createStore<WSMessage[]>([])
   const [ws, setWs] = createSignal<WebSocket | null>(null)
+  const isLargerThanSm = createMediaQuery('(min-width: 767px)', false)
 
   // const timer = setInterval(() => {
   //   refetch()
@@ -55,7 +60,7 @@ export default function Page() {
   })
 
   return (
-    <main class="flex flex-col w-screen h-screen h-[100dvh] bg-black whitespace-pre-wrap overflow-hidden">
+    <main class="flex flex-col w-screen h-[100svh] bg-black whitespace-pre-wrap overflow-hidden">
       <Title>MaydayLand</Title>
       <Header>
         <span>（目前共有</span>
@@ -65,7 +70,12 @@ export default function Page() {
       <div class="flex-1 overflow-y-scroll overflow-x-hidden">
         <Login onSubmit={setUser} />
         <Show when={!!user()}>
-          <Hero />
+          <div class="flex flex-col sm:flex-row">
+            <Hero onFinish={() => setAnim1Finished(true)} />
+            <Show when={isLargerThanSm() || anim1Finished()}>
+              <HeroInfo onFinish={() => setAnim2Finished(true)} />
+            </Show>
+          </div>
         </Show>
         {/* 
         <div onClick={() => {
