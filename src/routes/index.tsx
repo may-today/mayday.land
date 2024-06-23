@@ -18,8 +18,8 @@ import MessageCom from '~/components/MessageCom'
 import ScrollToBottom from '~/components/ScrollToBottom'
 import type { User, Message } from '~/types'
 
-const countApi = 'http://192.168.31.140:3000/count'
-const wsServerPrefix = 'ws://192.168.31.140:3000/ws'
+const countApi = 'https://maydayland-server-tn.ddiu.site/count'
+const wsServerPrefix = 'ws://maydayland-server-tn.ddiu.site/ws'
 const maxMessageLength = 200
 
 const getInitialCount = async () => {
@@ -108,7 +108,7 @@ export default function Page() {
       createReconnectingWS(serverUrl, undefined, {
         retries: 5,
       }),
-      { message: '__PING__', interval: 5000, wait: 1000 },
+      { message: '__PING__', interval: 3000, wait: 1000 },
     )
     ws.addEventListener('message', (event) => {
       const message = destr<Message>(event.data)
