@@ -9,7 +9,7 @@ const Footer: Component = () => {
     <>
       <div
         class={clsx([
-          'absolute bottom-2 right-2',
+          'absolute bottom-2 right-2 z-10',
           'flex items-center justify-center w-7 h-7',
           'bg-transparent border border-zinc-800 rounded-md',
           'transition-colors hover:bg-zinc-900 cursor-pointer',
@@ -21,11 +21,11 @@ const Footer: Component = () => {
       </div>
       <Show when={showFooter()}>
         <div
-          class="absolute inset-0 bg-black bg-opacity-50"
+          class="absolute inset-0 bg-black bg-opacity-50 z-20"
           onClick={() => setShowFooter(!showFooter())}
           onKeyPress={(e) => e.key === 'Enter' && setShowFooter(!showFooter())}
         >
-          <div class="absolute bottom-10 right-2 flex flex-col space-y-2 px-4 py-2 border border-zinc-800 bg-zinc-950 rounded-md text-xs">
+          <div class="absolute bottom-10 right-2 flex flex-col space-y-2 px-4 py-2 border border-zinc-800 bg-zinc-950 rounded-md text-xs z-30">
             <h1>MaydayLand·「透露」聊天室</h1>
             <div>
               <p>制作: <a class="text-sky-200" target="_blank" rel="noreferrer" href="https://ddiu.io">Diu</a></p>
