@@ -1,5 +1,6 @@
 import type { Component } from 'solid-js'
 import { createSignal, Show, onMount } from 'solid-js'
+import { v4 as uuidv4 } from 'uuid'
 import type { User } from '~/types'
 import Username from './Username'
 
@@ -23,6 +24,7 @@ const Login: Component<Props> = (props) => {
   const handleSubmit = (e: SubmitEvent) => {
     e.preventDefault()
     const user: User = {
+      id: localStorage.getItem('maydayland_uuid') || uuidv4(),
       name: name(),
       nameType: Math.floor(Math.random() * 12),
       suffix: generateSuffix(),
@@ -32,6 +34,7 @@ const Login: Component<Props> = (props) => {
       localStorage.removeItem('maydayland_name')
     } else {
       localStorage.setItem('maydayland_name', user.name)
+      localStorage.setItem('maydayland_uuid', user.id)
     }
     setFinalUser(user)
     props.onSubmit(user)
