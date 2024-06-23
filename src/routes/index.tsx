@@ -19,9 +19,9 @@ import ScrollToBottom from '~/components/ScrollToBottom'
 import Footer from '~/components/Footer'
 import type { User, Message } from '~/types'
 
-const countApi = 'https://maydayland-server-tn.ddiu.site/count'
-const wsServerPrefix = 'wss://maydayland-server-tn.ddiu.site/ws'
-const maxMessageLength = 200
+const countApi = 'http://192.168.31.140:3000/count'
+const wsServerPrefix = 'ws://192.168.31.140:3000/ws'
+const maxMessageLength = 5
 
 const getInitialCount = async () => {
   const response = await fetch(countApi)
@@ -149,20 +149,18 @@ export default function Page() {
       <div class="relative flex-1 overflow-y-scroll overflow-x-hidden pb-4" ref={scrollRef!}>
         <Login onSubmit={onUserChange} />
         <Show when={!!user()}>
-          <Show when={messages.length < maxMessageLength} fallback={(<p class="px-4">...</p>)}>
-            <div class="flex flex-col sm:flex-row mb-4">
-              <Hero
-                onFinish={() => setAnim1Finished(true)}
+          <div class="flex flex-col sm:flex-row mb-4">
+            <Hero
+              onFinish={() => setAnim1Finished(true)}
+              onUpdate={() => instantScrollToBottomThrottle(scrollRef)}
+            />
+            <Show when={isLargerThanSm() || anim1Finished()}>
+              <HeroInfo
+                onFinish={onAnimFinished}
                 onUpdate={() => instantScrollToBottomThrottle(scrollRef)}
               />
-              <Show when={isLargerThanSm() || anim1Finished()}>
-                <HeroInfo
-                  onFinish={onAnimFinished}
-                  onUpdate={() => instantScrollToBottomThrottle(scrollRef)}
-                />
-              </Show>
-            </div>
-          </Show>
+            </Show>
+          </div>
           <Show when={anim2Finished()}>
             <div class="px-4">
               <For each={messages}>
