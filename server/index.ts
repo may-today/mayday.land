@@ -63,12 +63,12 @@ const server = Bun.serve<UserData>({
         message,
       } as Message
       console.log(`[ws] ${genTime()} ${ws.data.user?.name}#${ws.data.user?.suffix}: ${message}`)
-      // if (message.length > 5) {
-      //   const pass = await tmsCheck(message)
-      //   if (!pass) {
-      //     _message.message = '***'
-      //   }
-      // }
+      if (message.length > 20) {
+        const pass = await tmsCheck(message)
+        if (!pass) {
+          _message.message = '***'
+        }
+      }
       server.publish('chat', JSON.stringify(_message))
     },
     close(ws, event) {
