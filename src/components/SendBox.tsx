@@ -31,7 +31,7 @@ const SendBox: Component<Props> = (props) => {
       <input
         id="text"
         type="text"
-        class="flex-1 height-full bg-transparent focus:outline-none caret-sky-500 mr-10 bg-red-200"
+        class="flex-1 height-full bg-transparent focus:outline-none caret-sky-500 mr-10"
         value={inputText()}
         onInput={(e) => setInputText(e.currentTarget.value)}
         autofocus
