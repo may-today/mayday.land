@@ -1,5 +1,5 @@
 import { Show, For, createSignal, createResource, createEffect, onCleanup } from 'solid-js'
-import { createStore } from 'solid-js/store'
+import { createStore, produce } from 'solid-js/store'
 import { Title } from '@solidjs/meta'
 import { createMediaQuery } from '@solid-primitives/media'
 import {
@@ -20,6 +20,7 @@ import type { User, Message } from '~/types'
 
 const countApi = 'http://192.168.31.140:3000/count'
 const wsServerPrefix = 'ws://192.168.31.140:3000/ws'
+const maxMessageLength = 200
 
 const getInitialCount = async () => {
   const response = await fetch(countApi)
@@ -31,6 +32,7 @@ export default function Page() {
   const [initialCount] = createResource(getInitialCount)
   const [messages, setMessages] = createStore<Message[]>([])
   const [user, setUser] = createSignal<User | null>(null)
+  const [currentConnectError, setCurrentConnectError] = createSignal(false)
   const [onlineCount, setOnlineCount] = createSignal(-1)
   const [anim1Finished, setAnim1Finished] = createSignal(false)
   const [anim2Finished, setAnim2Finished] = createSignal(false)
@@ -50,11 +52,23 @@ export default function Page() {
       setHasUnreadMessage(false)
     }
   }, [isScrollToBottom])
-
   onCleanup(() => {
     ws()?.close()
   })
 
+  const addMessage = (message: Message) => {
+    setMessages(produce((messages) => {
+      messages.push(message)
+      if (messages.length > maxMessageLength) {
+        messages.shift()
+      }
+    }))
+    if (isScrollToBottom()) {
+      instantScrollToBottomThrottle(scrollRef)
+    } else {
+      setHasUnreadMessage(true)
+    }
+  }
 
   const instantScrollToBottomThrottle = leading(throttle, (element: HTMLDivElement, force = false) => {
     (isScrollToBottom() || force) && element.scrollTo({ top: element.scrollHeight })
@@ -106,18 +120,20 @@ export default function Page() {
         return
       }
       console.log('message', message)
-      setMessages(messages.length, message)
-      if (isScrollToBottom()) {
-        instantScrollToBottomThrottle(scrollRef)
-      } else {
-        setHasUnreadMessage(true)
-      }
+      addMessage(message)
     })
     ws.addEventListener('open', () => {
       setWs(ws)
+      setCurrentConnectError(false)
     })
     ws.addEventListener('close', () => {
       setWs(null)
+      !currentConnectError() && addMessage({ user: 'local_warn', message: '连接已断开' })
+    })
+    ws.addEventListener('error', () => {
+      setWs(null)
+      !currentConnectError() && addMessage({ user: 'local_err', message: '连接失败！' })
+      setCurrentConnectError(true)
     })
   }
 
@@ -132,23 +148,22 @@ export default function Page() {
       <div class="relative flex-1 overflow-y-scroll overflow-x-hidden pb-4" ref={scrollRef!}>
         <Login onSubmit={onUserChange} />
         <Show when={!!user()}>
-          <div class="flex flex-col sm:flex-row">
-            <Hero
-              onFinish={() => setAnim1Finished(true)}
-              onUpdate={() => instantScrollToBottomThrottle(scrollRef)}
-            />
-            <Show when={isLargerThanSm() || anim1Finished()}>
-              <HeroInfo
-                onFinish={onAnimFinished}
+          <Show when={messages.length < maxMessageLength} fallback={(<p class="px-4">...</p>)}>
+            <div class="flex flex-col sm:flex-row mb-4">
+              <Hero
+                onFinish={() => setAnim1Finished(true)}
                 onUpdate={() => instantScrollToBottomThrottle(scrollRef)}
               />
-            </Show>
-          </div>
-          <Show when={anim2Finished()}>
-            <div class="px-4 mt-4">
-              <Show when={!ws()}>
-                <p class="ansi-red">连接失败！</p>
+              <Show when={isLargerThanSm() || anim1Finished()}>
+                <HeroInfo
+                  onFinish={onAnimFinished}
+                  onUpdate={() => instantScrollToBottomThrottle(scrollRef)}
+                />
               </Show>
+            </div>
+          </Show>
+          <Show when={anim2Finished()}>
+            <div class="px-4">
               <For each={messages}>
                 {(message) => <MessageCom message={message} />}
               </For>
@@ -156,7 +171,7 @@ export default function Page() {
           </Show>
         </Show>
       </div>
-      <Show when={!!user() && anim2Finished() && ws()}>
+      <Show when={!!user() && anim2Finished()}>
         <Show when={!isScrollToBottom()}>
           <ScrollToBottom
             onClickScrollTop={onClickScrollTop}

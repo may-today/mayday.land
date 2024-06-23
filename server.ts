@@ -15,7 +15,7 @@ const server = Bun.serve<UserData>({
       let user = {} as Partial<User>
       try {
         user = JSON.parse(userString)
-      } catch (e) {}
+      } catch (e) { }
       if (!user.name || !user.nameType) {
         return new Response('User info error', { status: 400 })
       }
