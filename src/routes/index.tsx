@@ -19,7 +19,7 @@ import ScrollToBottom from '~/components/ScrollToBottom'
 import type { User, Message } from '~/types'
 
 const countApi = 'https://maydayland-server-tn.ddiu.site/count'
-const wsServerPrefix = 'ws://maydayland-server-tn.ddiu.site/ws'
+const wsServerPrefix = 'wss://maydayland-server-tn.ddiu.site/ws'
 const maxMessageLength = 200
 
 const getInitialCount = async () => {
