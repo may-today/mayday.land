@@ -11,6 +11,7 @@ const classDict = {
   local_err: 'ansi-red',
   server: 'ansi-green',
   server_ping: 'ansi-cyan',
+  server_error: 'ansi-red',
 }
 
 const MessageCom: Component<Props> = (props) => {

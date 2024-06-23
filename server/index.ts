@@ -45,9 +45,14 @@ const server = Bun.serve<UserData>({
   },
   websocket: {
     maxPayloadLength: 1024 * 20,
-    open(ws) {
+    async open(ws) {
       userCount++
       ws.send(JSON.stringify({ user: 'server', message: `Hi ${ws.data.user.name}#${ws.data.user.suffix}，欢迎加入「透露」聊天室！` }))
+      const userPass = ws.data.user.name === '胡萝卜' || await tmsCheck(ws.data.user.name)
+      if (!userPass) {
+        ws.send(JSON.stringify({ user: 'server_error', message: '这个代号不合适，请更换代号' }))
+        return
+      }
       ws.subscribe('chat')
     },
     async message(ws, message) {
