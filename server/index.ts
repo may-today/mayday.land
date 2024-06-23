@@ -5,7 +5,11 @@ type UserData = {
   user: User
 }
 
+const maxMessageLength = 32
+const messageWaitTime = 20 * 1000
+
 let userCount = 0
+const userSendTimeMap = new Map<string, number>()
 
 const genTime = () => {
   const date = new Date()
@@ -65,9 +69,16 @@ const server = Bun.serve<UserData>({
       }
       const _message = {
         user: ws.data.user,
-        message: message.slice(0, 32),
+        message: message.slice(0, maxMessageLength),
       } as Message
       console.log(`[ws] ${genTime()} ${ws.data.user?.name}#${ws.data.user?.suffix}: ${_message.message}`)
+      const lastSendTime = userSendTimeMap.get(ws.data.user.id) || 0
+      const currentTime = Date.now()
+      if (currentTime - lastSendTime < messageWaitTime) {
+        ws.send(JSON.stringify({ user: 'server_error', message: '消息发送太快了' }))
+        return
+      }
+      userSendTimeMap.set(ws.data.user.id, currentTime)
       if (_message.message.length >= 4) {
         const pass = await tmsCheck(message)
         if (!pass) {
@@ -81,6 +92,7 @@ const server = Bun.serve<UserData>({
       if (userCount < 0) {
         userCount = 0
       }
+      userSendTimeMap.delete(ws.data.user.id)
     },
   },
 });
