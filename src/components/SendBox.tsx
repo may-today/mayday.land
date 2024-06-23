@@ -24,14 +24,14 @@ const SendBox: Component<Props> = (props) => {
       class="flex sm:items-center flex-col sm:flex-row px-4 py-2 border-t border-zinc-700 bg-black"
       onSubmit={handleSubmit}
     >
-      <label for="text">
+      <label for="text" class="mr-10">
         <Username user={props.user} />
         <span class="ansi-white mx-2">$</span>
       </label>
       <input
         id="text"
         type="text"
-        class="flex-1 height-full bg-transparent focus:outline-none caret-sky-500"
+        class="flex-1 height-full bg-transparent focus:outline-none caret-sky-500 mr-10 bg-red-200"
         value={inputText()}
         onInput={(e) => setInputText(e.currentTarget.value)}
         autofocus

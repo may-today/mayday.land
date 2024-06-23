@@ -5,6 +5,12 @@ import clsx from 'clsx'
 
 const Footer: Component = () => {
   const [showFooter, setShowFooter] = createSignal(false)
+
+  const toggleFooter = (e: Event) => {
+    e.preventDefault()
+    setShowFooter(!showFooter())
+  }
+
   return (
     <>
       <div
@@ -14,16 +20,21 @@ const Footer: Component = () => {
           'bg-transparent border border-zinc-800 rounded-md',
           'transition-colors hover:bg-zinc-900 cursor-pointer',
         ])}
-        onClick={() => setShowFooter(!showFooter())}
-        onKeyPress={(e) => e.key === 'Enter' && setShowFooter(!showFooter())}
+        onClick={toggleFooter}
+        onKeyPress={(e) => e.key === 'Enter' && toggleFooter}
       >
-        <Info size={12} class="opacity-70" />
+        <Info
+          size={12}
+          class="opacity-60"
+          // onClick={toggleFooter}
+          // onKeyPress={(e) => e.key === 'Enter' && toggleFooter}
+        />
       </div>
       <Show when={showFooter()}>
         <div
           class="absolute inset-0 bg-black bg-opacity-50 z-20"
-          onClick={() => setShowFooter(!showFooter())}
-          onKeyPress={(e) => e.key === 'Enter' && setShowFooter(!showFooter())}
+          onClick={toggleFooter}
+          onKeyPress={(e) => e.key === 'Enter' && toggleFooter}
         >
           <div class="absolute bottom-10 right-2 flex flex-col space-y-2 px-4 py-2 border border-zinc-800 bg-zinc-950 rounded-md text-xs z-30">
             <h1>MaydayLand·「透露」聊天室</h1>
