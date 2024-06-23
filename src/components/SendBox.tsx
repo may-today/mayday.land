@@ -36,6 +36,7 @@ const SendBox: Component<Props> = (props) => {
         onInput={(e) => setInputText(e.currentTarget.value)}
         autofocus
         required
+        maxLength={32}
         autocomplete="off"
         enterkeyhint="send"
       />

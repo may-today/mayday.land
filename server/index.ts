@@ -60,10 +60,10 @@ const server = Bun.serve<UserData>({
       }
       const _message = {
         user: ws.data.user,
-        message,
+        message: message.slice(0, 32),
       } as Message
-      console.log(`[ws] ${genTime()} ${ws.data.user?.name}#${ws.data.user?.suffix}: ${message}`)
-      if (message.length > 20) {
+      console.log(`[ws] ${genTime()} ${ws.data.user?.name}#${ws.data.user?.suffix}: ${_message.message}`)
+      if (_message.message.length >= 4) {
         const pass = await tmsCheck(message)
         if (!pass) {
           _message.message = '***'
