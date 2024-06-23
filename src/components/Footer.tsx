@@ -10,7 +10,7 @@ const Footer: Component = () => {
       <div
         class={clsx([
           'absolute bottom-2 right-2',
-          'flex items-center justify-center w-6 h-6',
+          'flex items-center justify-center w-7 h-7',
           'bg-transparent border border-zinc-800 rounded-md',
           'transition-colors hover:bg-zinc-900 cursor-pointer',
         ])}
