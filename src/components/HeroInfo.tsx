@@ -38,17 +38,17 @@ const HeroInfo: Component<Props> = (props) => {
   })
 
   return (
-    <div class="px-4 font-mono text-sm whitespace-pre text-center !leading-snug">
-      <p class="text-transparent">  ******************************  </p>
+    <div class="px-4 text-sm whitespace-pre text-center !leading-snug">
+      <p class="text-transparent font-mono">  ******************************  </p>
       <Show when={showState0()}>
-        <p>{"      #      "}</p>
-        <p>{"#    # #    #"}</p>
-        <p>{"# ## #  # ###"}</p>
-        <p>{"#   ##"}<span class={showState1() ? '' : 'text-transparent'}>{"  ##  #"}</span></p>
+        <p class="font-mono">{"      #      "}</p>
+        <p class="font-mono">{"#    # #    #"}</p>
+        <p class="font-mono">{"# ## #  # ###"}</p>
+        <p class="font-mono">{"#   ##"}<span class={showState1() ? '' : 'text-transparent'}>{"  ##  #"}</span></p>
       </Show>
       <Show when={showState1()}>
-        <p>{"#   # ## #  #"}</p>
-        <p>{"# ##  ##  ###"}</p>
+        <p class="font-mono">{"#   # ## #  #"}</p>
+        <p class="font-mono">{"# ##  ##  ###"}</p>
         <p>{" "}</p>
         <p class="ansi-red">{"欢 迎 光 临"}</p>
       </Show>
@@ -64,11 +64,11 @@ const HeroInfo: Component<Props> = (props) => {
         <p>{" "}</p>
       </Show>
       <Show when={showState4()}>
-        <p class="ansi-cyan">{"       ┌—————┐     ┌————┐   "}</p>
-        <p class="ansi-cyan">{"┌————┐ |┌———┐|     |    |   "}</p>
-        <p class="ansi-cyan">{"|    └—┘└———┘└——┐  |     \\  "}</p>
-        <p class="ansi-cyan">{"|               |  |      \\ "}</p>
-        <p class="ansi-cyan">{"|               └——┘       \\"}</p>
+        <p class="ansi-cyan font-mono">{"       ┌—————┐     ┌————┐   "}</p>
+        <p class="ansi-cyan font-mono">{"┌————┐ |┌———┐|     |    |   "}</p>
+        <p class="ansi-cyan font-mono">{"|    └—┘└———┘└——┐  |     \\  "}</p>
+        <p class="ansi-cyan font-mono">{"|               |  |      \\ "}</p>
+        <p class="ansi-cyan font-mono">{"|               └——┘       \\"}</p>
       </Show>
     </div>
   )
