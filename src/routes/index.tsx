@@ -43,6 +43,50 @@ export default function Page() {
   const [ws, setWs] = createSignal<WebSocket | null>(null)
   const isLargerThanSm = createMediaQuery('(min-width: 640px)', false)
 
+  let audioSource: AudioBufferSourceNode | null = null;
+
+  // Audio playback
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+
+  function stopAudio() {
+    if (audioSource) {
+      audioSource.stop();
+      audioSource = null; // 停止后清除 source 对象
+    }
+  }
+
+  function playAudio(url, loop = false) {
+    return new Promise((resolve, reject) => {
+      stopAudio(); // 停止当前音频
+      fetch(url)
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+        .then(audioBuffer => {
+          audioSource = audioContext.createBufferSource();
+          audioSource.buffer = audioBuffer;
+          audioSource.loop = loop;
+          audioSource.connect(audioContext.destination);
+          audioSource.start(0);
+          audioSource.onended = resolve; // Resolve the promise when audio playback is finished
+        })
+        .catch(err => {
+          console.error('Error with decoding audio data', err);
+          reject(err);
+        });
+    });
+  }
+
+  function playRemainingAudio() {
+    playAudio('assets/login_finished.mp3').then(() => {
+        playAudio('assets/chat.mp3', true); // 循环播放 chat.mp3
+    });
+  }
+
+  document.addEventListener('click', function() {
+    playAudio('assets/login.mp3', true);
+  }, { once: true });
+  
   const scroll = createScrollPosition(() => scrollRef)
   const isScrollToBottom = () => {
     if (!scrollRef) {
@@ -87,6 +131,7 @@ export default function Page() {
   const onUserChange = (newUser: User) => {
     setUser(newUser)
     connectWs(newUser)
+    playRemainingAudio();
   }
 
   const onSendText = async (text: string) => {
