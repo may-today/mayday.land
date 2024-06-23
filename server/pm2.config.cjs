@@ -1,5 +1,5 @@
 module.exports = {
   name: 'MaydayLand-server',
   script: 'index.ts',
-  interpreter: '~/.bun/bin/bun',
+  interpreter: '/home/ubuntu/.bun/bin/bun',
 }
