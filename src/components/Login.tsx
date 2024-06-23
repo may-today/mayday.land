@@ -3,7 +3,7 @@ import { createSignal, Show, onMount } from 'solid-js'
 import type { User } from '~/types'
 import Username from './Username'
 
-const preservedName = ['guest', 'new', 'admin', 'root']
+const preservedName = ['guest', 'admin', 'root']
 
 interface Props {
   onSubmit: (user: User) => void
@@ -28,10 +28,12 @@ const Login: Component<Props> = (props) => {
       suffix: generateSuffix(),
     }
     if (preservedName.includes(user.name)) {
-      user.name = 'test'
+      user.name = '胡萝卜'
+      localStorage.removeItem('maydayland_name')
+    } else {
+      localStorage.setItem('maydayland_name', user.name)
     }
     setFinalUser(user)
-    localStorage.setItem('maydayland_name', user.name)
     props.onSubmit(user)
   }
 
@@ -41,8 +43,6 @@ const Login: Component<Props> = (props) => {
         <label for="name">
           <span>请输入代号（试用请输入'</span>
           <span class="ansi-cyan">guest</span>
-          <span>'，注册请输入'</span>
-          <span class="ansi-cyan">new</span>
           <span>'）：</span>
         </label>
         <input
@@ -61,7 +61,7 @@ const Login: Component<Props> = (props) => {
       </p>
       <Show when={!!finalUser()}>
         <p>
-          <span>您的代号为 </span>
+          <span>代号为 </span>
           <Username user={finalUser()!} />
         </p>
       </Show>

@@ -9,11 +9,14 @@
   },
   "dependencies": {
     "@solid-primitives/media": "^2.2.9",
+    "@solid-primitives/scheduled": "^1.4.3",
+    "@solid-primitives/scroll": "^2.0.23",
     "@solid-primitives/websocket": "^1.2.2",
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.13.6",
     "@solidjs/start": "^1.0.2",
-    "ansi-to-html": "^0.7.2",
+    "clsx": "^2.1.1",
+    "destr": "^2.0.3",
     "picocolors": "^1.0.1",
     "solid-js": "^1.8.17",
     "vinxi": "^0.3.12"
@@ -22,6 +25,7 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "@types/bun": "^1.1.5",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4"

@@ -1,5 +1,7 @@
+import type { User, Message } from '~/types'
+
 type UserData = {
-  createdAt: number
+  user: User
 }
 
 let userCount = 0
@@ -7,10 +9,19 @@ let userCount = 0
 const server = Bun.serve<UserData>({
   fetch(req, server) {
     const url = new URL(req.url)
+    const params = url.searchParams
     if (url.pathname === '/ws') {
+      const userString = params.get('user') || '{}'
+      let user = {} as Partial<User>
+      try {
+        user = JSON.parse(userString)
+      } catch (e) {}
+      if (!user.name || !user.nameType) {
+        return new Response('User info error', { status: 400 })
+      }
       const success = server.upgrade(req, {
         data: {
-          createdAt: Date.now(),
+          user,
         }
       })
       return success
@@ -28,27 +39,23 @@ const server = Bun.serve<UserData>({
   websocket: {
     maxPayloadLength: 1024 * 20,
     open(ws) {
-      console.log('[ws] open', ws)
       userCount++
-      ws.send(JSON.stringify({ user: 'server', message: `Welcome to the server ${ws.data}!` }))
+      ws.send(JSON.stringify({ user: 'server', message: `Hi ${ws.data.user.name}#${ws.data.user.suffix}，欢迎加入「透露」聊天室！` }))
       ws.subscribe('chat')
-      ws.publish('chat', JSON.stringify({ user: 'server', message: `${ws.data} joined!` }))
     },
     async message(ws, message) {
-      console.log(ws.data)
-      console.log('[ws] message', ws, message)
       if (message === '__PING__') {
         ws.send(JSON.stringify({ user: 'server_ping', message: userCount }))
-      } else {
-        const _message = {
-          user: ws.toString(),
-          message: message,
-        }
-        server.publish('chat', JSON.stringify(_message))
+        return
       }
+      const _message = {
+        user: ws.data.user,
+        message,
+      } as Message
+      console.log('[ws]', ws.data.user?.name, message)
+      server.publish('chat', JSON.stringify(_message))
     },
     close(ws, event) {
-      console.log('[ws] close', ws, event)
       userCount--
       if (userCount < 0) {
         userCount = 0

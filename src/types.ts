@@ -3,3 +3,8 @@ export interface User {
   nameType: number
   suffix: string
 }
+
+export interface Message {
+  user: User | 'local_warn' | 'local_err' | 'server' | 'server_ping'
+  message: string
+}

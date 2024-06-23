@@ -23,7 +23,7 @@ const colors = [
 const Username: Component<Props> = (props) => {
   return (
     <span class={colors[props.user.nameType] || 'ansi-white'}>
-      {props.user.name}<span class="opacity-80">#{props.user.suffix}</span>
+      {props.user.name}<span class="opacity-65">#{props.user.suffix}</span>
     </span>
   )
 }

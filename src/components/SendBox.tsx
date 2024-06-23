@@ -21,7 +21,7 @@ const SendBox: Component<Props> = (props) => {
 
   return (
     <form
-      class="flex sm:items-center flex-col sm:flex-row px-4 py-2 border-t border-zinc-600"
+      class="flex sm:items-center flex-col sm:flex-row px-4 py-2 border-t border-zinc-700 bg-black"
       onSubmit={handleSubmit}
     >
       <label for="text">
