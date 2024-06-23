@@ -140,7 +140,7 @@ export default function Page() {
 
   return (
     <main class="flex flex-col w-screen h-[100svh] bg-black whitespace-pre-wrap overflow-hidden">
-      <Title>MaydayLand</Title>
+      <Title>MaydayLand·「透露」聊天室</Title>
       <Header>
         <span>（目前共有</span>
         <span class="ansi-cyan">{currentOnline()}</span>

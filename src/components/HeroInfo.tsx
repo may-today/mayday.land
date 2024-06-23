@@ -55,7 +55,7 @@ const HeroInfo: Component<Props> = (props) => {
       <Show when={showState2()}>
         <p class="ansi-cyan">{"5525回到那一天 BBS 站"}</p>
         <p class="ansi-yellow">{"Welcome to #5525 LIVE TOUR"}</p>
-        <p class="ansi-cyan">{"******************************"}</p>
+        <div class="ansi-cyan text-loading">{" "}</div>
         <p class="ansi-green">{"Since 1997"}<span class={showState3() ? '' : 'text-transparent'}>{".3.29"}</span></p>
       </Show>
       <Show when={showState3()}>
