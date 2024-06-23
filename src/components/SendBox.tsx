@@ -1,7 +1,10 @@
-import { createSignal, Show, onMount } from 'solid-js'
+import { createSignal } from 'solid-js'
 import type { Component } from 'solid-js'
 import type { User } from '~/types'
 import Username from './Username'
+
+const maxMessageLength = 32
+const messageWaitTimeSec = 20
 
 interface Props {
   user: User
@@ -10,12 +13,24 @@ interface Props {
 
 const SendBox: Component<Props> = (props) => {
   const [inputText, setInputText] = createSignal('')
+  const [waitTime, setWaitTime] = createSignal(0)
 
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault()
+    if (waitTime() > 0) return
     const result = await props.onSend(inputText())
     if (result) {
       setInputText('')
+      setWaitTime(messageWaitTimeSec)
+      let timer = null as null | Timer
+      timer = setInterval(() => {
+        setWaitTime((t) => t - 1)
+        if (waitTime() <= 0) {
+          setWaitTime(0)
+          // @ts-expect-error
+          clearInterval(timer)
+        }
+      }, 1000)
     }
   }
 
@@ -28,6 +43,9 @@ const SendBox: Component<Props> = (props) => {
         <Username user={props.user} />
         <span class="ansi-white mx-2">$</span>
       </label>
+      { waitTime() > 0 && (
+        <div class="px-1 border border-zinc-700 text-sm mr-2">{waitTime()}s</div>
+      )}
       <input
         id="text"
         type="text"
@@ -36,7 +54,7 @@ const SendBox: Component<Props> = (props) => {
         onInput={(e) => setInputText(e.currentTarget.value)}
         autofocus
         required
-        maxLength={32}
+        maxLength={maxMessageLength}
         autocomplete="off"
         enterkeyhint="send"
       />
