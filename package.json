@@ -17,6 +17,7 @@
     "@solidjs/start": "^1.0.2",
     "clsx": "^2.1.1",
     "destr": "^2.0.3",
+    "lucide-solid": "^0.396.0",
     "picocolors": "^1.0.1",
     "solid-js": "^1.8.17",
     "vinxi": "^0.3.12"

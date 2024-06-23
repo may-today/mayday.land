@@ -16,6 +16,7 @@ import HeroInfo from '~/components/HeroInfo'
 import SendBox from '~/components/SendBox'
 import MessageCom from '~/components/MessageCom'
 import ScrollToBottom from '~/components/ScrollToBottom'
+import Footer from '~/components/Footer'
 import type { User, Message } from '~/types'
 
 const countApi = 'https://maydayland-server-tn.ddiu.site/count'
@@ -180,6 +181,7 @@ export default function Page() {
         </Show>
         <SendBox user={user()!} onSend={onSendText} />
       </Show>
+      <Footer/>
     </main>
   )
 }
