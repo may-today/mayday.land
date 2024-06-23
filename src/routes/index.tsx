@@ -19,9 +19,11 @@ import ScrollToBottom from '~/components/ScrollToBottom'
 import Footer from '~/components/Footer'
 import type { User, Message } from '~/types'
 
-const countApi = 'http://192.168.31.140:3000/count'
-const wsServerPrefix = 'ws://192.168.31.140:3000/ws'
-const maxMessageLength = 5
+// const countApi = 'http://192.168.31.140:3000/count'
+// const wsServerPrefix = 'ws://192.168.31.140:3000/ws'
+const countApi = 'https://maydayland-server-tn.ddiu.site/count'
+const wsServerPrefix = 'wss://maydayland-server-tn.ddiu.site/ws'
+const maxMessageHistoryLength = 10
 
 const getInitialCount = async () => {
   const response = await fetch(countApi)
@@ -60,7 +62,7 @@ export default function Page() {
   const addMessage = (message: Message) => {
     setMessages(produce((messages) => {
       messages.push(message)
-      if (messages.length > maxMessageLength) {
+      if (messages.length > maxMessageHistoryLength) {
         messages.shift()
       }
     }))
