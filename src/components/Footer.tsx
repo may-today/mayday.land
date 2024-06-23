@@ -25,7 +25,7 @@ const Footer: Component = () => {
           onClick={() => setShowFooter(!showFooter())}
           onKeyPress={(e) => e.key === 'Enter' && setShowFooter(!showFooter())}
         >
-          <div class="absolute bottom-10 right-2 flex flex-col space-y-2 px-4 py-2 border border-zinc-800 rounded-md text-xs">
+          <div class="absolute bottom-10 right-2 flex flex-col space-y-2 px-4 py-2 border border-zinc-800 bg-zinc-950 rounded-md text-xs">
             <h1>MaydayLand·「透露」聊天室</h1>
             <div>
               <p>制作: <a class="text-sky-200" target="_blank" rel="noreferrer" href="https://ddiu.io">Diu</a></p>
