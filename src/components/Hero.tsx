@@ -3,6 +3,7 @@ import type { Component } from 'solid-js'
 
 interface Props {
   onFinish: () => void
+  onUpdate: () => void
 }
 
 const Hero: Component<Props> = (props) => {
@@ -15,18 +16,23 @@ const Hero: Component<Props> = (props) => {
   onMount(() => {
     setTimeout(() => {
       setShowState0(true)
+      props.onUpdate()
     }, 500)
     setTimeout(() => {
       setShowState1(true)
+      props.onUpdate()
     }, 1000)
     setTimeout(() => {
       setShowState2(true)
+      props.onUpdate()
     }, 1500)
     setTimeout(() => {
       setShowState3(true)
+      props.onUpdate()
     }, 2000)
     setTimeout(() => {
       setShowState4(true)
+      props.onUpdate()
       props.onFinish()
     }, 2500)
   })

@@ -1,4 +1,4 @@
-import { Show, For, createSignal, createResource, createEffect } from 'solid-js'
+import { Show, For, createSignal, createResource, createEffect, onCleanup } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { Title } from '@solidjs/meta'
 import { createMediaQuery } from '@solid-primitives/media'
@@ -51,10 +51,14 @@ export default function Page() {
     }
   }, [isScrollToBottom])
 
+  onCleanup(() => {
+    ws()?.close()
+  })
 
-  const instantScrollToBottomThrottle = leading(throttle, (element: HTMLDivElement) => {
-    element.scrollTo({ top: element.scrollHeight })
-  }, 250)
+
+  const instantScrollToBottomThrottle = leading(throttle, (element: HTMLDivElement, force = false) => {
+    (isScrollToBottom() || force) && element.scrollTo({ top: element.scrollHeight })
+  }, 300)
 
   const currentOnline = () => {
     if (onlineCount() >= 0) {
@@ -75,6 +79,13 @@ export default function Page() {
 
   const onClickScrollTop = () => {
     scrollRef.scrollTo({ top: scrollRef.scrollHeight, behavior: 'smooth' })
+  }
+
+  const onAnimFinished = () => {
+    setAnim2Finished(true)
+    setTimeout(() => {
+      instantScrollToBottomThrottle(scrollRef, true)
+    }, 500)
   }
 
   const connectWs = (user: User) => {
@@ -117,16 +128,20 @@ export default function Page() {
         <span>（目前共有</span>
         <span class="ansi-cyan">{currentOnline()}</span>
         <span>人上线）</span>
-        {JSON.stringify(isScrollToBottom())}
-        {scroll.y}
       </Header>
       <div class="relative flex-1 overflow-y-scroll overflow-x-hidden pb-4" ref={scrollRef!}>
         <Login onSubmit={onUserChange} />
         <Show when={!!user()}>
           <div class="flex flex-col sm:flex-row">
-            <Hero onFinish={() => setAnim1Finished(true)} />
+            <Hero
+              onFinish={() => setAnim1Finished(true)}
+              onUpdate={() => instantScrollToBottomThrottle(scrollRef)}
+            />
             <Show when={isLargerThanSm() || anim1Finished()}>
-              <HeroInfo onFinish={() => setAnim2Finished(true)} />
+              <HeroInfo
+                onFinish={onAnimFinished}
+                onUpdate={() => instantScrollToBottomThrottle(scrollRef)}
+              />
             </Show>
           </div>
           <Show when={anim2Finished()}>
