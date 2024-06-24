@@ -9,8 +9,12 @@ const Alert: Component<Props> = (props) => {
   const [showAlert, setShowAlert] = createSignal(false)
 
   onMount(() => {
+    if (sessionStorage.getItem('maydayland_alert')) {
+      return
+    }
     setTimeout(() => {
       setShowAlert(true)
+      sessionStorage.setItem('maydayland_alert', '1')
     }, 1500)
   })
 
