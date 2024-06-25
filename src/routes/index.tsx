@@ -17,13 +17,14 @@ import SendBox from '~/components/SendBox'
 import MessageCom from '~/components/MessageCom'
 import ScrollToBottom from '~/components/ScrollToBottom'
 import Footer from '~/components/Footer'
+import Alert from '~/components/Alert'
 import type { User, Message } from '~/types'
 
-// const countApi = 'http://192.168.31.140:3000/count'
-// const wsServerPrefix = 'ws://192.168.31.140:3000/ws'
+// const countApi = 'http://localhost:3000/count'
+// const wsServerPrefix = 'ws://localhost:3000/ws'
 const countApi = 'https://maydayland-server-tn.ddiu.site/count'
 const wsServerPrefix = 'wss://maydayland-server-tn.ddiu.site/ws'
-const maxMessageHistoryLength = 10
+const maxMessageHistoryLength = 6
 
 const getInitialCount = async () => {
   const response = await fetch(countApi)
@@ -35,6 +36,7 @@ export default function Page() {
   const [initialCount] = createResource(getInitialCount)
   const [messages, setMessages] = createStore<Message[]>([])
   const [user, setUser] = createSignal<User | null>(null)
+  const [currentAlertMessage, setCurrentAlertMessage] = createSignal('')
   const [currentConnectError, setCurrentConnectError] = createSignal(false)
   const [onlineCount, setOnlineCount] = createSignal(-1)
   const [anim1Finished, setAnim1Finished] = createSignal(false)
@@ -110,6 +112,9 @@ export default function Page() {
         messages.shift()
       }
     }))
+    if (message.user === 'server') {
+      setCurrentAlertMessage(message.message)
+    }
     if (isScrollToBottom()) {
       instantScrollToBottomThrottle(scrollRef)
     } else {
@@ -225,6 +230,9 @@ export default function Page() {
           />
         </Show>
         <SendBox user={user()!} onSend={onSendText} />
+        <Show when={currentAlertMessage()}>
+          <Alert message={currentAlertMessage()} />
+        </Show>
       </Show>
       <Footer/>
     </main>

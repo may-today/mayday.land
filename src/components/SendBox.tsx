@@ -39,13 +39,13 @@ const SendBox: Component<Props> = (props) => {
       class="flex sm:items-center flex-col sm:flex-row px-4 py-2 border-t border-zinc-700 bg-black"
       onSubmit={handleSubmit}
     >
-      <label for="text" class="mr-10 sm:mr-0">
+      <label for="text" class="mr-10 sm:mr-2">
         <Username user={props.user} />
-        <span class="ansi-white mx-2">$</span>
+        <span class="ansi-white ml-2">$</span>
+        { waitTime() > 0 && (
+          <span class="ml-2 px-1 border border-zinc-700 text-sm">{waitTime()}s</span>
+        )}
       </label>
-      { waitTime() > 0 && (
-        <div class="px-1 border border-zinc-700 text-sm mr-2">{waitTime()}s</div>
-      )}
       <input
         id="text"
         type="text"

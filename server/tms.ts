@@ -3,6 +3,7 @@ import crypto from 'node:crypto'
 const ENDPOINT = Bun.env.TMS_ENDPOINT || ''
 const SECRET_ID = Bun.env.TMS_SECRET_ID || ''
 const SECRET_KEY = Bun.env.TMS_SECRET_KEY || ''
+const BIZ_TYPE = Bun.env.TMS_BIZ_TYPE || ''
 
 const _sortParams = (params: Record<string, string | number>) => {
   let strParam = ''
@@ -53,6 +54,7 @@ export const tmsCheck = async (content: string) => {
     SecretId: SECRET_ID,
     Version,
     Content: base64Content,
+    BizType: BIZ_TYPE,
   } as Record<string, string | number>
 
   const signature = _genSignature(params)
@@ -81,7 +83,7 @@ export const tmsCheck = async (content: string) => {
   if (data.Response.Suggestion === 'Review') {
     const label = data.Response.Label
     console.warn(`[TMS] check Review (${label})`, content)
-    return true
+    return false
   }
   if (data.Response.Suggestion === 'Block') {
     const label = data.Response.Label
