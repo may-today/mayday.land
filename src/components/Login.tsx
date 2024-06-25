@@ -42,6 +42,7 @@ const Login: Component<Props> = (props) => {
 
   return (
     <form class="px-4" onSubmit={handleSubmit}>
+      <span>正在播放：透露 - 五月天</span>
       <p>
         <label for="name">
           <span>请输入代号（试用请输入'</span>

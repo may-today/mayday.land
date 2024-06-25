@@ -44,6 +44,7 @@ const Footer: Component = () => {
             <p>源代码: <a class="text-sky-200" target="_blank" rel="noreferrer" href="https://github.com/may-today/mayday.land">may-today/mayday.land</a></p>
           </div>
           <div>
+            <p>《透露》8bit改编: <a class="text-sky-200" target="_blank" rel="noreferrer" href="https://miugrey.com.cn">miuGrey</a></p>
             <p>部分ascii字符画来自: ringomango</p>
             <p>字体: Cubic-11</p>
           </div>
