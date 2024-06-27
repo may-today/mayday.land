@@ -3,6 +3,7 @@ import { createSignal, Show, onMount } from 'solid-js'
 import { v4 as uuidv4 } from 'uuid'
 import type { User } from '~/types'
 import Username from './Username'
+import PlayController from './PlayController'
 
 const preservedName = ['guest', 'admin', 'root']
 
@@ -42,7 +43,7 @@ const Login: Component<Props> = (props) => {
 
   return (
     <form class="px-4" onSubmit={handleSubmit}>
-      <span>正在播放：透露 - 五月天</span>
+      <PlayController />
       <p>
         <label for="name">
           <span>请输入代号（试用请输入'</span>
