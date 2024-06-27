@@ -18,7 +18,7 @@ import MessageCom from '~/components/MessageCom'
 import ScrollToBottom from '~/components/ScrollToBottom'
 import Footer from '~/components/Footer'
 import Alert from '~/components/Alert'
-import { setAudio, setAudioCallback } from '~/stores/audio'
+import { setAudio, setAudioCallback, $audioPlaying } from '~/stores/audio'
 import type { User, Message } from '~/types'
 
 // const countApi = 'http://localhost:3000/count'
@@ -51,10 +51,15 @@ export default function Page() {
     setAudioCallback('assets/login_finished.mp3', () => {
       setAudio('assets/chat.mp3', true)
     })
+    $audioPlaying.set(true)
   }
 
   document.addEventListener('click', () => {
+    if ($audioPlaying.get()) {
+      return
+    }
     setAudio('assets/login.mp3', true)
+    $audioPlaying.set(true)
   }, { once: true });
   
   const scroll = createScrollPosition(() => scrollRef)

@@ -1,7 +1,7 @@
 import { atom } from 'nanostores'
 
-export const $currentPlayingSrc = atom('')
-export const $audioPlaying = atom(true)
+export const $currentPlayingSrc = atom('assets/login.mp3')
+export const $audioPlaying = atom(false)
 export const $player = atom<HTMLAudioElement | null>(null)
 
 export const setAudio = (src: string, loop = false) => {
