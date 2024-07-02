@@ -8,6 +8,8 @@ type UserData = {
 
 const maxMessageLength = 32
 const messageWaitTime = 20 * 1000
+const userBlockList = (await Bun.file('user.list').text() || '').split('\n').filter(Boolean)
+const keywordBlockList = (await Bun.file('keyword.list').text() || '').split('\n').filter(Boolean)
 
 let userCount = 0
 const userSendTimeMap = new Map<string, number>()
@@ -75,6 +77,7 @@ const server = Bun.serve<UserData>({
         message: message.slice(0, maxMessageLength),
       } as Message
       console.log(`[ws] ${genTime()} ${ws.data.ip} ${ws.data.user?.id} ${ws.data.user?.name}#${ws.data.user?.suffix}: ${_message.message}`)
+      // send time check
       const lastSendTime = userSendTimeMap.get(ws.data.user.id) || 0
       const currentTime = Date.now()
       if (currentTime - lastSendTime < messageWaitTime) {
@@ -82,6 +85,20 @@ const server = Bun.serve<UserData>({
         return
       }
       userSendTimeMap.set(ws.data.user.id, currentTime)
+      // local blocklist check
+      if (userBlockList.includes(ws.data.user?.id)) {
+        console.error('[local] block user', message)
+        ws.send(JSON.stringify({ user: ws.data.user, message }))
+        return
+      }
+      if (keywordBlockList.find(blockKey => {
+        return message.includes(blockKey) || ws.data.user?.name.includes(blockKey)
+      })) {
+        console.error('[local] block message', message)
+        ws.send(JSON.stringify({ user: ws.data.user, message }))
+        return
+      }
+      // tms check
       if (_message.message.length >= 4) {
         const pass = await tmsCheck(message)
         if (!pass) {

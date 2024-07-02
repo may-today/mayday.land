@@ -26,7 +26,7 @@ const Alert: Component<Props> = (props) => {
   return (
     <Show when={showAlert()}>
       <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
-        <div class="flex flex-col items-center space-y-4 p-4 max-w-md m-6 border border-zinc-800 bg-zinc-950 rounded-md z-30">
+        <div class="flex flex-col items-center space-y-4 px-6 py-4 max-w-md m-6 border border-zinc-800 bg-zinc-950 rounded-md z-30">
           <h1 class="text-center">「透露」聊天室须知</h1>
           <div class="text-sm">
             <p>{props.message}</p>
