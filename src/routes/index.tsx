@@ -21,10 +21,8 @@ import Alert from '~/components/Alert'
 import { setAudio, setAudioCallback, $audioPlaying } from '~/stores/audio'
 import type { User, Message } from '~/types'
 
-const countApi = 'http://localhost:3000/count'
-const wsServerPrefix = 'ws://localhost:3000/ws'
-// const countApi = 'https://maydayland-server-tn.ddiu.site/count'
-// const wsServerPrefix = 'wss://maydayland-server-tn.ddiu.site/ws'
+const countApi = import.meta.env.VITE_SERVER_HOST_COUNT || ''
+const wsServerPrefix = import.meta.env.VITE_SERVER_HOST_WS || ''
 const maxMessageHistoryLength = 6
 
 const getInitialCount = async () => {
