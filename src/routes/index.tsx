@@ -21,20 +21,23 @@ import Alert from '~/components/Alert'
 import { setAudio, setAudioCallback, $audioPlaying } from '~/stores/audio'
 import type { User, Message } from '~/types'
 
-// const countApi = 'http://localhost:3000/count'
-// const wsServerPrefix = 'ws://localhost:3000/ws'
-const countApi = 'https://maydayland-server-tn.ddiu.site/count'
-const wsServerPrefix = 'wss://maydayland-server-tn.ddiu.site/ws'
+const countApi = 'http://localhost:3000/count'
+const wsServerPrefix = 'ws://localhost:3000/ws'
+// const countApi = 'https://maydayland-server-tn.ddiu.site/count'
+// const wsServerPrefix = 'wss://maydayland-server-tn.ddiu.site/ws'
 const maxMessageHistoryLength = 6
 
-// const getInitialCount = async () => {
-//   const response = await fetch(countApi)
-//   return Number(await response.text())
-// }
+const getInitialCount = async () => {
+  const response = await fetch(countApi).catch(() => null)
+  if (!response) {
+    return 0
+  }
+  return Number(await response.text())
+}
 
 export default function Page() {
   let scrollRef: HTMLDivElement
-  // const [initialCount] = createResource(getInitialCount)
+  const [initialCount] = createResource(getInitialCount)
   const [messages, setMessages] = createStore<Message[]>([])
   const [user, setUser] = createSignal<User | null>(null)
   const [currentAlertMessage, setCurrentAlertMessage] = createSignal('')
@@ -99,16 +102,16 @@ export default function Page() {
     (isScrollToBottom() || force) && element.scrollTo({ top: element.scrollHeight })
   }, 300)
 
-  // const currentOnline = () => {
-  //   if (onlineCount() >= 0) {
-  //     return onlineCount()
-  //   }
-  //   return initialCount() || 0
-  // }
+  const currentOnline = () => {
+    if (onlineCount() >= 0) {
+      return onlineCount()
+    }
+    return initialCount() || 0
+  }
 
   const onUserChange = (newUser: User) => {
     setUser(newUser)
-    // connectWs(newUser)
+    connectWs(newUser)
     playRemainingAudio();
   }
 
@@ -167,9 +170,9 @@ export default function Page() {
     <main class="flex flex-col w-screen h-[100svh] bg-black whitespace-pre-wrap overflow-hidden">
       <Title>MaydayLand·「透露」聊天室</Title>
       <Header>
-        {/* <span>（目前共有</span>
+        <span>（目前共有</span>
         <span class="ansi-cyan">{currentOnline()}</span>
-        <span>人上线）</span> */}
+        <span>人上线）</span>
       </Header>
       <div class="relative flex-1 overflow-y-scroll overflow-x-hidden pb-4" ref={scrollRef!}>
         <Login onSubmit={onUserChange} />
@@ -195,7 +198,7 @@ export default function Page() {
           </Show>
         </Show>
       </div>
-      {/* <Show when={!!user() && anim2Finished()}>
+      <Show when={!!user() && anim2Finished()}>
         <Show when={!isScrollToBottom()}>
           <ScrollToBottom
             onClickScrollTop={onClickScrollTop}
@@ -206,7 +209,7 @@ export default function Page() {
         <Show when={currentAlertMessage()}>
           <Alert message={currentAlertMessage()} />
         </Show>
-      </Show> */}
+      </Show>
       <Footer/>
     </main>
   )

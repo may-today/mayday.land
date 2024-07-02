@@ -3,6 +3,7 @@ import { tmsCheck } from './tms'
 
 type UserData = {
   user: User
+  ip: string
 }
 
 const maxMessageLength = 32
@@ -30,9 +31,11 @@ const server = Bun.serve<UserData>({
       if (!user.name || !user.nameType) {
         return new Response('User info error', { status: 400 })
       }
+      const ip = req.headers.get('x-forwarded-for')
       const success = server.upgrade(req, {
         data: {
           user,
+          ip,
         }
       })
       return success
@@ -71,7 +74,7 @@ const server = Bun.serve<UserData>({
         user: ws.data.user,
         message: message.slice(0, maxMessageLength),
       } as Message
-      console.log(`[ws] ${genTime()} ${ws.data.user?.name}#${ws.data.user?.suffix}: ${_message.message}`)
+      console.log(`[ws] ${genTime()} ${ws.data.ip} ${ws.data.user?.id} ${ws.data.user?.name}#${ws.data.user?.suffix}: ${_message.message}`)
       const lastSendTime = userSendTimeMap.get(ws.data.user.id) || 0
       const currentTime = Date.now()
       if (currentTime - lastSendTime < messageWaitTime) {
