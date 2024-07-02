@@ -9,6 +9,7 @@ const messageWaitTimeSec = 20
 interface Props {
   user: User
   onSend: (text: string) => Promise<boolean>
+  errorMessage?: string
 }
 
 const SendBox: Component<Props> = (props) => {
@@ -49,7 +50,7 @@ const SendBox: Component<Props> = (props) => {
       <input
         id="text"
         type="text"
-        class="flex-1 height-full bg-transparent focus:outline-none caret-sky-500 mr-10"
+        class="flex-1 height-full bg-transparent focus:outline-none caret-sky-500 mr-10 placeholder:text-zinc-600"
         value={inputText()}
         onInput={(e) => setInputText(e.currentTarget.value)}
         autofocus
@@ -57,6 +58,8 @@ const SendBox: Component<Props> = (props) => {
         maxLength={maxMessageLength}
         autocomplete="off"
         enterkeyhint="send"
+        readOnly={!!props.errorMessage || undefined}
+        placeholder={props.errorMessage || '请输入消息...'}
       />
     </form>
   )

@@ -6,6 +6,6 @@ export interface User {
 }
 
 export interface Message {
-  user: User | 'local_warn' | 'local_err' | 'server' | 'server_ping' | 'server_error'
+  user: User | 'local_warn' | 'local_err' | 'server' | 'server_ping' | 'server_error' | 'server_success'
   message: string
 }

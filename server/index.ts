@@ -8,6 +8,10 @@ type UserData = {
 
 const maxMessageLength = 32
 const messageWaitTime = 20 * 1000
+const openHour = [
+  [0, 4],
+  [23, 24],
+]
 const userBlockList = (await Bun.file('user.list').text() || '').split('\n').filter(Boolean)
 const keywordBlockList = (await Bun.file('keyword.list').text() || '').split('\n').filter(Boolean)
 
@@ -18,6 +22,12 @@ const genTime = () => {
   const date = new Date()
   const dd = [date.getHours(), date.getMinutes(), date.getSeconds()].map((n) => n.toString().padStart(2, '0'))
   return dd.join(':')
+}
+
+const isTimeOpen = () => {
+  const date = new Date()
+  const hour = date.getHours()
+  return openHour.some(([start, end]) => hour >= start && hour < end)
 }
 
 const server = Bun.serve<UserData>({
@@ -62,6 +72,11 @@ const server = Bun.serve<UserData>({
         ws.send(JSON.stringify({ user: 'server_error', message: '这个代号不合适，换一个吧' }))
         return
       }
+      if (!isTimeOpen()) {
+        ws.send(JSON.stringify({ user: 'server_error', message: '「透露」聊天室打烊中' }))
+        return
+      }
+      ws.send(JSON.stringify({ user: 'server_success' }))
       ws.subscribe('chat')
     },
     async message(ws, message) {
@@ -78,10 +93,13 @@ const server = Bun.serve<UserData>({
       } as Message
       console.log(`[ws] ${genTime()} ${ws.data.ip} ${ws.data.user?.id} ${ws.data.user?.name}#${ws.data.user?.suffix}: ${_message.message}`)
       // send time check
+      if (!isTimeOpen()) {
+        ws.send(JSON.stringify({ user: 'server_error', message: '「透露」聊天室打烊中' }))
+        return
+      }
       const lastSendTime = userSendTimeMap.get(ws.data.user.id) || 0
       const currentTime = Date.now()
       if (currentTime - lastSendTime < messageWaitTime) {
-        ws.send(JSON.stringify({ user: 'server_error', message: '消息发送太快了' }))
         return
       }
       userSendTimeMap.set(ws.data.user.id, currentTime)

@@ -41,6 +41,7 @@ export default function Page() {
   const [messages, setMessages] = createStore<Message[]>([])
   const [user, setUser] = createSignal<User | null>(null)
   const [currentAlertMessage, setCurrentAlertMessage] = createSignal('')
+  const [currentErrorMessage, setCurrentErrorMessage] = createSignal('')
   const [currentConnectError, setCurrentConnectError] = createSignal(false)
   const [onlineCount, setOnlineCount] = createSignal(-1)
   const [anim1Finished, setAnim1Finished] = createSignal(false)
@@ -90,6 +91,10 @@ export default function Page() {
     }))
     if (message.user === 'server') {
       setCurrentAlertMessage(message.message)
+    } else if (message.user === 'server_error') {
+      setCurrentErrorMessage(message.message)
+    } else if (message.user === 'server_success') {
+      setCurrentErrorMessage('')
     }
     if (isScrollToBottom()) {
       instantScrollToBottomThrottle(scrollRef)
@@ -205,7 +210,11 @@ export default function Page() {
             hasUnreadMessage={hasUnreadMessage()}
           />
         </Show>
-        <SendBox user={user()!} onSend={onSendText} />
+        <SendBox
+          user={user()!}
+          onSend={onSendText}
+          errorMessage={currentErrorMessage()}
+        />
         <Show when={currentAlertMessage()}>
           <Alert message={currentAlertMessage()} />
         </Show>
