@@ -23,7 +23,7 @@ import type { User, Message } from '~/types'
 
 const countApi = import.meta.env.VITE_SERVER_HOST_COUNT || ''
 const wsServerPrefix = import.meta.env.VITE_SERVER_HOST_WS || ''
-const maxMessageHistoryLength = 6
+const maxMessageHistoryLength = 20
 
 const getInitialCount = async () => {
   const response = await fetch(countApi).catch(() => null)
