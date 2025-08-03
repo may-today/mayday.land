@@ -4,7 +4,7 @@ import type { User } from '~/types'
 import Username from './Username'
 
 const maxMessageLength = 32
-const messageWaitTimeSec = 20
+const messageWaitTimeSec = 10
 
 interface Props {
   user: User

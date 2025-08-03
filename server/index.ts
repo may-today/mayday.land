@@ -7,7 +7,7 @@ type UserData = {
 }
 
 const maxMessageLength = 32
-const messageWaitTime = 20 * 1000
+const messageWaitTime = 10 * 1000
 const openHour = [
   [0, 4],
   [23, 24],
